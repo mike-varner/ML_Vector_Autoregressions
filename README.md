@@ -1,4 +1,4 @@
-# ML_Vector_Autoregressions
+# Machine Learning Vector Autoregressions (ML VARs)
 Linear machine learning methods (LASSO, Ridge, and Elastic-Net) to estimate Vector Autoregresssions (VARs) and compute Impulse Response Functions (IRFs). VARs have been particularily popular in empirical dynamic macroeconomics as they are easy to estimate and interpret. These types of models are used both for structural inference as well as forcasting. While these models are relatively easy to program (primarily Stata and Matlab) and decipher, they come with the high cost of requiring many identifying assumptions. Additionally, these models almost exclusively use Ordinary Least Squates for parameter estimation. This project proposes three new flavors of VARs in an attempt to resolve some of these known issues and potentially provide more accurate forcasts.
 
 ## Motivation/Background
@@ -16,10 +16,8 @@ Will Nicholson has created a similar VAR estimation scheme here: [Big VAR](http:
 
 ## Authors
 
-* **Mike Varner** - *Initial Development* - [link](https://github.com/regmonkeyols/)
+* **Mike Varner** - *Initial Development* - [link](https://github.com/mike-varner/)
 
 ## Acknowledgments
 
 * This project would not have been possible without the support of Nathan Tefft
-
-#End of File
