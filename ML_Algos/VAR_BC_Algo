@@ -1,0 +1,185 @@
+#Import Packages
+import numpy
+import pandas
+from sklearn.cross_validation import KFold
+from sklearn.grid_search import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import Lasso
+from sklearn import linear_model
+from sklearn.linear_model import LassoCV
+
+"""
+Stage 1: Import and Clean Data
+"""
+#import data
+qe_data = pandas.read_csv('/Users/Mike/Desktop/Bates Files/Senior Year/Thesis/QE_Data/qe_data.csv', low_memory=False)
+#remove date variable
+date = pandas.DataFrame(qe_data, columns=['date'])
+x = qe_data.drop('date', 1)
+#create list of exogeneous variable names 
+exogeneous_var_names = ['money_supply', 'tax_rev', 'federal_debt', 'gov_exp', 'broad_index', 'financial_stress', 'industrial_production']
+#remove exogeneous variables
+endogeneous = x.drop(exogeneous_var_names, 1)
+#create a list of the endogeneous variable names
+endogeneous_variable_names = list(endogeneous.columns.values)
+#create dataframe of exogeneous variables
+exogeneous = x.drop(endogeneous_variable_names, 1)
+
+#set the maximum number of lags that the model can consider for variable selection and estimation
+#I have arbitrairly chose twice as many lags as endogeneous variables
+max_lags = int(len(endogeneous_variable_names)*2+1)
+lags = (range(max_lags))[1:]
+
+#create lagged values of the endogeneous variables
+for p in lags:
+    for var in endogeneous_variable_names:
+        endogeneous["L{0}_{1}".format(p , var)] = endogeneous[var].shift(p)
+
+#add back in the exogeneous variables
+#prepared_data = endogeneous.add(exogeneous)
+
+#remove missing values created by creating lags
+#this might not be what I want, but come back to it later
+clean_data = endogeneous.dropna(how='any') 
+
+"""
+Stage 2: Compute Matricies Using LASSO
+"""
+####Calculate the Y matrix (KxT)
+Y = clean_data[endogeneous_variable_names].transpose()
+Y.as_matrix()
+
+###Calculate B Matrix (k*(kp+1))####
+#define the LASSO with 10 KFold CV, to calculate coefficients and intercepts
+lasso = linear_model.LassoCV(cv=10, n_jobs=-1 , normalize=True)
+'''
+#fit the LASSO only using lagged values of the endogeneous variables
+qe_lasso = lasso.fit(clean_data.drop(endogeneous_variable_names, 1).as_matrix() , clean_data.qe.as_matrix())
+#strip the coefficients from the LASSO
+#add the intercept to the beginning of the array
+qe_lasso_coeff = numpy.hstack((qe_lasso.intercept_, qe_lasso.coef_))
+'''
+
+fed_funds_lasso = lasso.fit(clean_data.drop(endogeneous_variable_names, 1).as_matrix() , clean_data.fed_funds.as_matrix())
+fed_funds_lasso_coeff = fed_funds_lasso.coef_
+unemployment_lasso = lasso.fit(clean_data.drop(endogeneous_variable_names, 1).as_matrix() , clean_data.unemployment.as_matrix())
+unemployment_lasso_coeff = unemployment_lasso.coef_
+treasury_bill_lasso = lasso.fit(clean_data.drop(endogeneous_variable_names, 1).as_matrix() , clean_data.treasury_bill.as_matrix())
+treasury_bill_lasso_coeff = treasury_bill_lasso.coef_
+qe_lasso = lasso.fit(clean_data.drop(endogeneous_variable_names, 1).as_matrix() , clean_data.qe.as_matrix())
+qe_lasso_coeff = qe_lasso.coef_
+
+#initialize the first row of the B matrix as fed_funds coefficients
+B = fed_funds_lasso_coeff
+#append rows of coefficients 
+B = numpy.vstack([unemployment_lasso_coeff,B])
+B = numpy.vstack([qe_lasso_coeff,B])
+B = numpy.vstack([treasury_bill_lasso_coeff,B])
+B = pandas.DataFrame(B)
+
+#####PUT INTO SPACE STATE NOTATION#####
+#create a new coefficient matrix which is (npxnp) or (32x32)
+
+I_4 = numpy.identity(28)
+zero_columns = numpy.zeros((28,4))
+add_on = numpy.column_stack((I_4,zero_columns))
+#add_on = pandas.DataFrame(add_on)
+
+#append add_on to to B to get B_Space_State
+B_Space_State = pandas.DataFrame(numpy.append(B,add_on, axis=0))
+
+
+
+####Calculate the Z matrix ((Kp+1)xT)####
+#swap the rows and colummns of the clean_data matrix 
+transpose_of_clean = clean_data.drop(endogeneous_variable_names, 1).transpose()
+#number of observatiosn, or columns
+T = float(len(transpose_of_clean.columns))
+#create a (1xT) row of 1s to add into the Z matrix
+row_of_ones = numpy.ones((T,), dtype=np.int)
+#add row of ones as the first column in transpose_of_clean
+Z = numpy.vstack((row_of_ones,transpose_of_clean.as_matrix()))
+Z = pandas.DataFrame(Z)
+
+Z = transpose_of_clean
+
+####Calculate the Gamma matrix ((Kp+1)x(Kp+1))
+Gamma = numpy.matmul(Z,Z.transpose())/T
+Gamma = pandas.DataFrame(Gamma)
+
+####Calculate the residual matrix U (KxT)
+Y_hat = numpy.matmul(B,Z) #should be (KxT)
+U = Y-Y_hat
+
+####Calculate Sigma matrix (TxT)
+one_over_T = float(1/T)
+Sigma = pandas.DataFrame(numpy.matmul(U,U.transpose())*one_over_T)
+
+
+#orthogonalize Sigma by imposing off diagonals are 0
+diag_sigma = pandas.DataFrame(numpy.diag(np.diag(Sigma)))
+#calculate cholesky decomposistion of sigma
+chol_of_sigma = pandas.DataFrame(numpy.linalg.cholesky(diag_sigma))
+#define the inverse of the cholesky decomposistion of sigma to use below
+inverse_chol = numpy.linalg.inv(chol_of_sigma)
+
+
+####Calculate Space-State version of the Q matrix
+zero_columns = numpy.zeros((28,4))
+zeros_32x28 = numpy.zeros((32,28))
+#append add_on to to Sigma to get Q_Space_State
+Q_Space_State = pandas.DataFrame(numpy.append(inverse_chol,zero_columns, axis=0))
+Q_Space_State = pandas.DataFrame(numpy.column_stack((Q_Space_State,zeros_32x28)))
+
+
+#create impulse column vector (TX1)
+e_feddunds = pandas.DataFrame(numpy.vstack((1,numpy.zeros(((31),1)))))
+e_qe = pandas.DataFrame(numpy.vstack((numpy.vstack((numpy.zeros((2, 1)),1)),numpy.zeros((29,1)))))
+
+e_0 = e_qe
+
+
+'''Calculate IRs
+'''
+#run shock e_0 through system
+#is the 0 period shock correct?? it's not exactly 1
+initial_impact = e_0
+one_period = pandas.DataFrame(numpy.matmul(B_Space_State,initial_impact))
+two_period = pandas.DataFrame(numpy.matmul(numpy.linalg.matrix_power(B_Space_State, 2),initial_impact))
+three_period = pandas.DataFrame(numpy.matmul(numpy.linalg.matrix_power(B_Space_State, 3),initial_impact))
+four_period = pandas.DataFrame(numpy.matmul(numpy.linalg.matrix_power(B_Space_State, 4),initial_impact))
+five_period = pandas.DataFrame(numpy.matmul(numpy.linalg.matrix_power(B_Space_State, 5),initial_impact))
+six_period = pandas.DataFrame(numpy.matmul(numpy.linalg.matrix_power(B_Space_State, 6),initial_impact))
+seven_period = pandas.DataFrame(numpy.matmul(numpy.linalg.matrix_power(B_Space_State, 7),initial_impact))
+eight_period = pandas.DataFrame(numpy.matmul(numpy.linalg.matrix_power(B_Space_State, 8),initial_impact))
+nine_period = pandas.DataFrame(numpy.matmul(numpy.linalg.matrix_power(B_Space_State, 9),initial_impact))
+ten_period = pandas.DataFrame(numpy.matmul(numpy.linalg.matrix_power(B_Space_State, 10),initial_impact))
+
+#collect the period estimates into one matrix
+impulse_1st_var = pandas.DataFrame(numpy.column_stack((initial_impact,one_period)))
+impulse_1st_var = pandas.DataFrame(numpy.column_stack((impulse_1st_var,two_period)))
+impulse_1st_var = pandas.DataFrame(numpy.column_stack((impulse_1st_var,three_period)))
+impulse_1st_var = pandas.DataFrame(numpy.column_stack((impulse_1st_var,four_period)))
+impulse_1st_var = pandas.DataFrame(numpy.column_stack((impulse_1st_var,five_period)))
+impulse_1st_var = pandas.DataFrame(numpy.column_stack((impulse_1st_var,six_period)))
+impulse_1st_var = pandas.DataFrame(numpy.column_stack((impulse_1st_var,seven_period)))
+impulse_1st_var = pandas.DataFrame(numpy.column_stack((impulse_1st_var,eight_period)))
+impulse_1st_var = pandas.DataFrame(numpy.column_stack((impulse_1st_var,nine_period)))
+impulse_1st_var = pandas.DataFrame(numpy.column_stack((impulse_1st_var,ten_period)))
+
+
+#this is really messed up : doesn't look remotely correct
+imp_qe_response_unemp = pandas.DataFrame(impulse_1st_var.loc[1:1].transpose())
+
+
+
+
+
+
+
+
+
+
+
+
+

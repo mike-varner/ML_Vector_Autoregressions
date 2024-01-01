@@ -1,0 +1,37 @@
+import numpy
+import pandas
+
+
+#hard code in from Stata output
+intercepts = pandas.DataFrame(numpy.vstack([.0008919,-.0069]))
+mean_vector = pandas.DataFrame(numpy.vstack([.0014599,-.0113854]))
+B = pandas.DataFrame(numpy.matrix([[.1809552,-.0153289],[-.1271766,.3755184]]))
+#Q = pandas.DataFrame(numpy.matrix([[2.4493432413,0],[0.3419578854,5.6069014585]]))
+
+#cholesky of Sigma
+Q =  pandas.DataFrame(numpy.matrix([[0.408273,0],[-0.0249,0.178352]]))
+#Q = pandas.DataFrame(numpy.matrix([[0.180081,0],[-0.056453,0.404351]]))
+
+Q = pandas.DataFrame(numpy.matrix([[0.1767,0],[-0.0438,0.3735]]))
+
+
+e_unemp = pandas.DataFrame(numpy.vstack((1 ,numpy.zeros((1, 1)))))
+#initial impact @ t=0
+Q_e = pandas.DataFrame(numpy.matmul(Q,e_unemp))
+
+
+
+B_Times_Mean = numpy.matmul(B,mean_vector)
+point_estimate_0 = pandas.DataFrame(numpy.add(B_Times_Mean,Q_e))
+point_estimate_1 = pandas.DataFrame(numpy.add(intercepts,numpy.matmul(B,point_estimate_0)))
+point_estimate_2 = pandas.DataFrame(numpy.add(intercepts,numpy.matmul(B,point_estimate_1)))
+point_estimate_3 = pandas.DataFrame(numpy.add(intercepts,numpy.matmul(B,point_estimate_2)))
+
+B_times_Mean_Plus_Intercet = pandas.DataFrame(numpy.add(intercepts,B_Times_Mean))
+
+
+
+stata_estimate_0 = pandas.DataFrame(numpy.vstack([.176553,-.043342]))
+estimate_1 = pandas.DataFrame(numpy.matmul(B,stata_estimate_0))
+
+

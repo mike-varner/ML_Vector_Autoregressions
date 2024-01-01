@@ -1,0 +1,125 @@
+#Import Packages
+import numpy
+import pandas
+from sklearn import linear_model
+
+"""
+Stage 1: Import and Clean Data
+"""
+#import data
+qe_data = pandas.read_csv('/Users/Mike/Desktop/Bates Files/Senior Year/Thesis/Algo_Check/toy_data.csv', low_memory=False)
+#remove date variable
+date = pandas.DataFrame(qe_data, columns=['date'])
+x = qe_data.drop('date', 1)
+
+#create data without lags to use in variance/covariance calculation below
+clean_data_with_out_lags = x.dropna(how='any')
+
+#create lagged values of the endogeneous variables
+x['L1_unemployment'] = x['unemployment'].shift(1)
+x['L1_inflation'] = x['inflation'].shift(1)
+
+#remove missing values created by creating lags
+clean_data = x.dropna(how='any') 
+
+'''Calculate the Variance/Covariance matrix using numpy
+'''
+Sigma = pandas.DataFrame(numpy.cov(clean_data_with_out_lags,rowvar=False))
+#calculate cholesky decomposistion of sigma
+chol_of_sigma = pandas.DataFrame(numpy.linalg.cholesky(Sigma))
+#define the inverse of the cholesky decomposistion of sigma to use below
+inverse_chol = numpy.linalg.inv(chol_of_sigma)
+Q = inverse_chol
+Q = pandas.DataFrame(Q)
+
+
+
+
+'''Calculate B row by row using OLS
+'''
+ols = linear_model.LinearRegression()
+
+lagged_data = clean_data.drop('unemployment',1)
+lagged_data = pandas.DataFrame(lagged_data.drop('inflation',1))
+
+unemployment_ols = ols.fit(lagged_data , clean_data.unemployment.as_matrix())
+unemployment_ols_coeff = unemployment_ols.coef_
+inflation_ols = ols.fit(lagged_data , clean_data.inflation.as_matrix())
+inflation_ols_coeff = inflation_ols.coef_
+
+B = inflation_ols_coeff
+#append rows of coefficients 
+B = numpy.vstack([unemployment_ols_coeff,B])
+B_OLS_Row_by_Row = pandas.DataFrame(B)
+
+
+'''Calculate a column vector of the intercepts
+'''
+intercepts = pandas.DataFrame(numpy.vstack([unemployment_ols.intercept_ ,inflation_ols.intercept_]))
+    #unemployment_ols.intercept_
+    #inflation_ols.intercept_
+
+'''Calculate column vector of means
+'''
+mean_of_unemp = clean_data["unemployment"].mean()
+mean_of_inflation = clean_data["inflation"].mean()
+mean_vector = mean_of_unemp
+mean_vector = pandas.DataFrame(numpy.vstack([mean_vector,mean_of_inflation]))
+
+
+'''Calculate IRs
+'''
+#create impulse column vector (TX1)
+#e_unemp = pandas.DataFrame(numpy.vstack((numpy.vstack((numpy.zeros((1, 1)),1)),numpy.zeros((2,1)))))
+    #e_unemp = pandas.DataFrame(numpy.vstack((numpy.zeros((1, 1)),1)))
+e_unemp = pandas.DataFrame(numpy.vstack((1,numpy.zeros((1, 1)))))
+e_0 = e_unemp
+
+#initial impact @ t=0
+Q_e = pandas.DataFrame(numpy.matmul(Q,e_0))
+
+B_Times_Mean = numpy.matmul(B_OLS_Row_by_Row,mean_vector)
+point_estimate_0 = pandas.DataFrame(numpy.add(numpy.add(intercepts,B_Times_Mean),Q_e))
+
+point_estimate_1 = 
+
+
+
+
+
+
+
+
+
+
+
+#create the point estimates IR_k = {e_0 , QBQe_0 , QB^2Qe_0 , ... , QB^kQe_0}
+for p in range(1,21):
+    globals()['point_estimate_{}'.format(p)] = pandas.DataFrame(numpy.matmul(Q, numpy.matmul(numpy.linalg.matrix_power(B_OLS_Row_by_Row, p),Q_e)))
+
+
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((Q_e,point_estimate_1)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_2)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_3)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_4)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_5)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_6)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_7)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_8)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_9)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_10)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_11)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_12)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_13)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_14)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_15)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_16)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_17)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_18)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_19)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_20)))
+
+
+#this is really messed up : doesn't look remotely correct
+imp_qe_response_unemp = pandas.DataFrame(impulse_qe_var.loc[1:1].transpose())
+

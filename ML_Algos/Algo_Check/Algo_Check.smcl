@@ -1,0 +1,377 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/Mike/Desktop/Bates Files/Senior Year/Thesis/Algo_Check/Algo_Check.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}14 Nov 2016, 15:55:19
+{txt}
+{com}. tsset date
+{res}{txt}{col 9}time variable:  {res}{col 25}date, 1 to 550
+{txt}{col 17}delta:  {res}1 unit
+{txt}
+{com}.         
+.         /*Infaltion Rate*/
+.         dfgls cpi
+ 
+{txt}DF-GLS for {res}cpi{col 58}{txt}Number of obs = {res}  531
+{txt}Maxlag = {res}18{txt} chosen by Schwert criterion
+ 
+{col 16}DF-GLS tau{col 32}1% Critical{col 50}5% Critical{col 67}10% Critical
+  [lags]{col 14}Test Statistic{col 36}Value{col 54}Value{col 72}Value
+{hline 78}
+{col 5}18{col 14}{res}    -3.926{col 31}    -3.480{col 49}    -2.822{col 67}    -2.539
+{txt}{col 5}17{col 14}{res}    -3.713{col 31}    -3.480{col 49}    -2.825{col 67}    -2.542
+{txt}{col 5}16{col 14}{res}    -3.636{col 31}    -3.480{col 49}    -2.829{col 67}    -2.545
+{txt}{col 5}15{col 14}{res}    -3.549{col 31}    -3.480{col 49}    -2.832{col 67}    -2.548
+{txt}{col 5}14{col 14}{res}    -3.059{col 31}    -3.480{col 49}    -2.836{col 67}    -2.551
+{txt}{col 5}13{col 14}{res}    -2.853{col 31}    -3.480{col 49}    -2.839{col 67}    -2.554
+{txt}{col 5}12{col 14}{res}    -2.470{col 31}    -3.480{col 49}    -2.842{col 67}    -2.557
+{txt}{col 5}11{col 14}{res}    -4.222{col 31}    -3.480{col 49}    -2.845{col 67}    -2.560
+{txt}{col 5}10{col 14}{res}    -4.368{col 31}    -3.480{col 49}    -2.848{col 67}    -2.563
+{txt}{col 5}9{col 14}{res}    -4.084{col 31}    -3.480{col 49}    -2.851{col 67}    -2.566
+{txt}{col 5}8{col 14}{res}    -3.567{col 31}    -3.480{col 49}    -2.854{col 67}    -2.568
+{txt}{col 5}7{col 14}{res}    -3.520{col 31}    -3.480{col 49}    -2.857{col 67}    -2.571
+{txt}{col 5}6{col 14}{res}    -3.296{col 31}    -3.480{col 49}    -2.860{col 67}    -2.573
+{txt}{col 5}5{col 14}{res}    -3.172{col 31}    -3.480{col 49}    -2.863{col 67}    -2.576
+{txt}{col 5}4{col 14}{res}    -3.181{col 31}    -3.480{col 49}    -2.866{col 67}    -2.578
+{txt}{col 5}3{col 14}{res}    -2.899{col 31}    -3.480{col 49}    -2.868{col 67}    -2.581
+{txt}{col 5}2{col 14}{res}    -3.002{col 31}    -3.480{col 49}    -2.871{col 67}    -2.583
+{txt}{col 5}1{col 14}{res}    -3.051{col 31}    -3.480{col 49}    -2.873{col 67}    -2.585
+ 
+{txt}Opt Lag (Ng-Perron seq t) = {res}15{col 22}{txt} with RMSE {res}  .313861
+{txt}Min SC   = {res} -2.12854{txt} at lag {res}15{txt} with RMSE {res}  .313861
+{txt}Min MAIC = {res}-2.195273{txt} at lag {res}13{txt} with RMSE {res} .3189221
+{txt}
+{com}.         dfuller cpi, lags(13) regress trend
+
+{txt}Augmented Dickey-Fuller test for unit root         Number of obs   = {res}      536
+
+{txt}{col 32}{hline 10} Interpolated Dickey-Fuller {hline 9}
+                  Test         1% Critical       5% Critical      10% Critical
+               Statistic           Value             Value             Value
+{hline 78}
+ Z(t)         {res}    -3.171            -3.960            -3.410            -3.120
+{txt}{hline 78}
+MacKinnon approximate p-value for Z(t) = {res}0.0903
+
+{txt}{hline 13}{c TT}{hline 64}
+D.cpi{col 14}{c |}{col 21}Coef.{col 29}Std. Err.{col 44}t{col 49}P>|t|{col 59}[95% Conf. Interval]
+{hline 13}{c +}{hline 64}
+         cpi{col 14}{c |}
+{col 10}L1. {c |}{res}{col 17}-.0226195{col 28} .0071329{col 38}   -3.17{col 48} 0.002{col 58}-.0366323{col 70}-.0086066
+{txt}{col 10}LD. {c |}{res}{col 17} .4425661{col 28}  .043061{col 38}   10.28{col 48} 0.000{col 58} .3579712{col 70}  .527161
+        {txt}L2D. {c |}{res}{col 17} .0120692{col 28}  .040501{col 38}    0.30{col 48} 0.766{col 58}-.0674965{col 70} .0916349
+        {txt}L3D. {c |}{res}{col 17} -.037762{col 28} .0400537{col 38}   -0.94{col 48} 0.346{col 58} -.116449{col 70} .0409251
+        {txt}L4D. {c |}{res}{col 17} .0728414{col 28} .0399934{col 38}    1.82{col 48} 0.069{col 58}-.0057272{col 70} .1514099
+        {txt}L5D. {c |}{res}{col 17} .0130827{col 28}  .040088{col 38}    0.33{col 48} 0.744{col 58}-.0656716{col 70} .0918369
+        {txt}L6D. {c |}{res}{col 17} .0188615{col 28} .0400931{col 38}    0.47{col 48} 0.638{col 58}-.0599028{col 70} .0976259
+        {txt}L7D. {c |}{res}{col 17} .0570318{col 28} .0400781{col 38}    1.42{col 48} 0.155{col 58}-.0217031{col 70} .1357666
+        {txt}L8D. {c |}{res}{col 17} .0141866{col 28} .0401446{col 38}    0.35{col 48} 0.724{col 58}-.0646788{col 70} .0930521
+        {txt}L9D. {c |}{res}{col 17} .0566186{col 28} .0401803{col 38}    1.41{col 48} 0.159{col 58} -.022317{col 70} .1355542
+       {txt}L10D. {c |}{res}{col 17} .0858371{col 28} .0403609{col 38}    2.13{col 48} 0.034{col 58} .0065466{col 70} .1651276
+       {txt}L11D. {c |}{res}{col 17} .1569244{col 28}  .040446{col 38}    3.88{col 48} 0.000{col 58} .0774668{col 70}  .236382
+       {txt}L12D. {c |}{res}{col 17}-.5341285{col 28} .0410201{col 38}  -13.02{col 48} 0.000{col 58} -.614714{col 70}-.4535431
+       {txt}L13D. {c |}{res}{col 17} .1538727{col 28} .0434688{col 38}    3.54{col 48} 0.000{col 58} .0684767{col 70} .2392688
+      {txt}_trend{col 14}{c |}{res}{col 17}-.0003248{col 28} .0001279{col 38}   -2.54{col 48} 0.011{col 58}-.0005761{col 70}-.0000736
+       {txt}_cons{col 14}{c |}{res}{col 17} .1824572{col 28} .0627749{col 38}    2.91{col 48} 0.004{col 58} .0591335{col 70} .3057808
+{txt}{hline 13}{c BT}{hline 64}
+
+{com}.         gen cpi2 = cpi - date* -.000111 
+{txt}(1 missing value generated)
+
+{com}.         dfuller D.cpi2, lags(13) regress trend  
+
+{txt}Augmented Dickey-Fuller test for unit root         Number of obs   = {res}      535
+
+{txt}{col 32}{hline 10} Interpolated Dickey-Fuller {hline 9}
+                  Test         1% Critical       5% Critical      10% Critical
+               Statistic           Value             Value             Value
+{hline 78}
+ Z(t)         {res}    -6.711            -3.960            -3.410            -3.120
+{txt}{hline 78}
+MacKinnon approximate p-value for Z(t) = {res}0.0000
+
+{txt}{hline 13}{c TT}{hline 64}
+D2.cpi2{col 14}{c |}{col 21}Coef.{col 29}Std. Err.{col 44}t{col 49}P>|t|{col 59}[95% Conf. Interval]
+{hline 13}{c +}{hline 64}
+      D.cpi2{col 14}{c |}
+{col 10}L1. {c |}{res}{col 17} -.596508{col 28} .0888811{col 38}   -6.71{col 48} 0.000{col 58} -.771119{col 70} -.421897
+{txt}{col 10}LD. {c |}{res}{col 17} .0229434{col 28} .0860212{col 38}    0.27{col 48} 0.790{col 58}-.1460493{col 70}  .191936
+        {txt}L2D. {c |}{res}{col 17} .0631641{col 28} .0792063{col 38}    0.80{col 48} 0.426{col 58}-.0924402{col 70} .2187685
+        {txt}L3D. {c |}{res}{col 17}  .009396{col 28}  .078732{col 38}    0.12{col 48} 0.905{col 58}-.1452765{col 70} .1640686
+        {txt}L4D. {c |}{res}{col 17}  .069983{col 28} .0771459{col 38}    0.91{col 48} 0.365{col 58}-.0815737{col 70} .2215397
+        {txt}L5D. {c |}{res}{col 17} .0696272{col 28} .0749387{col 38}    0.93{col 48} 0.353{col 58}-.0775933{col 70} .2168476
+        {txt}L6D. {c |}{res}{col 17} .0788332{col 28} .0721241{col 38}    1.09{col 48} 0.275{col 58} -.062858{col 70} .2205243
+        {txt}L7D. {c |}{res}{col 17} .1221934{col 28} .0692139{col 38}    1.77{col 48} 0.078{col 58}-.0137805{col 70} .2581673
+        {txt}L8D. {c |}{res}{col 17} .1225606{col 28} .0656631{col 38}    1.87{col 48} 0.063{col 58}-.0064375{col 70} .2515587
+        {txt}L9D. {c |}{res}{col 17} .1672615{col 28} .0618743{col 38}    2.70{col 48} 0.007{col 58} .0457065{col 70} .2888164
+       {txt}L10D. {c |}{res}{col 17}  .234422{col 28} .0578713{col 38}    4.05{col 48} 0.000{col 58} .1207312{col 70} .3481128
+       {txt}L11D. {c |}{res}{col 17} .3799331{col 28} .0527937{col 38}    7.20{col 48} 0.000{col 58} .2762174{col 70} .4836488
+       {txt}L12D. {c |}{res}{col 17}-.1735536{col 28} .0501557{col 38}   -3.46{col 48} 0.001{col 58}-.2720867{col 70}-.0750205
+       {txt}L13D. {c |}{res}{col 17} -.061113{col 28} .0440011{col 38}   -1.39{col 48} 0.165{col 58}-.1475552{col 70} .0253292
+      {txt}_trend{col 14}{c |}{res}{col 17}-.0000408{col 28}  .000091{col 38}   -0.45{col 48} 0.654{col 58}-.0002196{col 70}  .000138
+       {txt}_cons{col 14}{c |}{res}{col 17} .0076126{col 28} .0291514{col 38}    0.26{col 48} 0.794{col 58}-.0496566{col 70} .0648818
+{txt}{hline 13}{c BT}{hline 64}
+
+{com}.         /*reject a 2nd unit root*/
+.         
+.         /*U3 Unemployment Rate*/
+.         dfgls unemp
+ 
+{txt}DF-GLS for {res}unemp{col 58}{txt}Number of obs = {res}  531
+{txt}Maxlag = {res}18{txt} chosen by Schwert criterion
+ 
+{col 16}DF-GLS tau{col 32}1% Critical{col 50}5% Critical{col 67}10% Critical
+  [lags]{col 14}Test Statistic{col 36}Value{col 54}Value{col 72}Value
+{hline 78}
+{col 5}18{col 14}{res}    -2.378{col 31}    -3.480{col 49}    -2.822{col 67}    -2.539
+{txt}{col 5}17{col 14}{res}    -2.322{col 31}    -3.480{col 49}    -2.825{col 67}    -2.542
+{txt}{col 5}16{col 14}{res}    -2.317{col 31}    -3.480{col 49}    -2.829{col 67}    -2.545
+{txt}{col 5}15{col 14}{res}    -2.170{col 31}    -3.480{col 49}    -2.832{col 67}    -2.548
+{txt}{col 5}14{col 14}{res}    -2.127{col 31}    -3.480{col 49}    -2.836{col 67}    -2.551
+{txt}{col 5}13{col 14}{res}    -2.304{col 31}    -3.480{col 49}    -2.839{col 67}    -2.554
+{txt}{col 5}12{col 14}{res}    -2.339{col 31}    -3.480{col 49}    -2.842{col 67}    -2.557
+{txt}{col 5}11{col 14}{res}    -2.614{col 31}    -3.480{col 49}    -2.845{col 67}    -2.560
+{txt}{col 5}10{col 14}{res}    -2.441{col 31}    -3.480{col 49}    -2.848{col 67}    -2.563
+{txt}{col 5}9{col 14}{res}    -2.529{col 31}    -3.480{col 49}    -2.851{col 67}    -2.566
+{txt}{col 5}8{col 14}{res}    -2.535{col 31}    -3.480{col 49}    -2.854{col 67}    -2.568
+{txt}{col 5}7{col 14}{res}    -2.555{col 31}    -3.480{col 49}    -2.857{col 67}    -2.571
+{txt}{col 5}6{col 14}{res}    -2.631{col 31}    -3.480{col 49}    -2.860{col 67}    -2.573
+{txt}{col 5}5{col 14}{res}    -2.474{col 31}    -3.480{col 49}    -2.863{col 67}    -2.576
+{txt}{col 5}4{col 14}{res}    -2.273{col 31}    -3.480{col 49}    -2.866{col 67}    -2.578
+{txt}{col 5}3{col 14}{res}    -1.952{col 31}    -3.480{col 49}    -2.868{col 67}    -2.581
+{txt}{col 5}2{col 14}{res}    -1.618{col 31}    -3.480{col 49}    -2.871{col 67}    -2.583
+{txt}{col 5}1{col 14}{res}    -1.214{col 31}    -3.480{col 49}    -2.873{col 67}    -2.585
+ 
+{txt}Opt Lag (Ng-Perron seq t) = {res}14{col 22}{txt} with RMSE {res} .1627076
+{txt}Min SC   = {res}-3.537996{txt} at lag {res} 4{txt} with RMSE {res} .1655404
+{txt}Min MAIC = {res}-3.562609{txt} at lag {res} 5{txt} with RMSE {res} .1648511
+{txt}
+{com}.         dfuller unemp, lags(4) regress trend
+
+{txt}Augmented Dickey-Fuller test for unit root         Number of obs   = {res}      545
+
+{txt}{col 32}{hline 10} Interpolated Dickey-Fuller {hline 9}
+                  Test         1% Critical       5% Critical      10% Critical
+               Statistic           Value             Value             Value
+{hline 78}
+ Z(t)         {res}    -2.970            -3.960            -3.410            -3.120
+{txt}{hline 78}
+MacKinnon approximate p-value for Z(t) = {res}0.1407
+
+{txt}{hline 13}{c TT}{hline 64}
+D.unemp{col 14}{c |}{col 21}Coef.{col 29}Std. Err.{col 44}t{col 49}P>|t|{col 59}[95% Conf. Interval]
+{hline 13}{c +}{hline 64}
+       unemp{col 14}{c |}
+{col 10}L1. {c |}{res}{col 17}-.0139422{col 28} .0046948{col 38}   -2.97{col 48} 0.003{col 58}-.0231646{col 70}-.0047199
+{txt}{col 10}LD. {c |}{res}{col 17} .0553923{col 28} .0423028{col 38}    1.31{col 48} 0.191{col 58}-.0277065{col 70} .1384912
+        {txt}L2D. {c |}{res}{col 17} .2049025{col 28} .0417308{col 38}    4.91{col 48} 0.000{col 58} .1229272{col 70} .2868778
+        {txt}L3D. {c |}{res}{col 17} .1791955{col 28} .0418303{col 38}    4.28{col 48} 0.000{col 58} .0970249{col 70} .2613662
+        {txt}L4D. {c |}{res}{col 17} .1577722{col 28} .0424283{col 38}    3.72{col 48} 0.000{col 58} .0744267{col 70} .2411176
+      {txt}_trend{col 14}{c |}{res}{col 17}-.0000278{col 28} .0000453{col 38}   -0.61{col 48} 0.539{col 58}-.0001169{col 70} .0000612
+       {txt}_cons{col 14}{c |}{res}{col 17} .0962375{col 28}  .033819{col 38}    2.85{col 48} 0.005{col 58} .0298041{col 70} .1626709
+{txt}{hline 13}{c BT}{hline 64}
+
+{com}.         dfuller D.unemp, lags(4) regress trend
+
+{txt}Augmented Dickey-Fuller test for unit root         Number of obs   = {res}      544
+
+{txt}{col 32}{hline 10} Interpolated Dickey-Fuller {hline 9}
+                  Test         1% Critical       5% Critical      10% Critical
+               Statistic           Value             Value             Value
+{hline 78}
+ Z(t)         {res}    -6.165            -3.960            -3.410            -3.120
+{txt}{hline 78}
+MacKinnon approximate p-value for Z(t) = {res}0.0000
+
+{txt}{hline 13}{c TT}{hline 64}
+D2.unemp{col 14}{c |}{col 21}Coef.{col 29}Std. Err.{col 44}t{col 49}P>|t|{col 59}[95% Conf. Interval]
+{hline 13}{c +}{hline 64}
+     D.unemp{col 14}{c |}
+{col 10}L1. {c |}{res}{col 17}-.3938934{col 28} .0638918{col 38}   -6.17{col 48} 0.000{col 58}-.5194019{col 70} -.268385
+{txt}{col 10}LD. {c |}{res}{col 17}-.5615256{col 28} .0659674{col 38}   -8.51{col 48} 0.000{col 58}-.6911114{col 70}-.4319399
+        {txt}L2D. {c |}{res}{col 17}-.3728645{col 28} .0652341{col 38}   -5.72{col 48} 0.000{col 58}-.5010099{col 70}-.2447191
+        {txt}L3D. {c |}{res}{col 17}-.2181386{col 28} .0586044{col 38}   -3.72{col 48} 0.000{col 58}-.3332605{col 70}-.1030167
+        {txt}L4D. {c |}{res}{col 17}-.0770145{col 28} .0429658{col 38}   -1.79{col 48} 0.074{col 58}-.1614162{col 70} .0073872
+      {txt}_trend{col 14}{c |}{res}{col 17}  -.00002{col 28} .0000457{col 38}   -0.44{col 48} 0.662{col 58}-.0001097{col 70} .0000697
+       {txt}_cons{col 14}{c |}{res}{col 17} .0047409{col 28} .0145181{col 38}    0.33{col 48} 0.744{col 58}-.0237783{col 70} .0332601
+{txt}{hline 13}{c BT}{hline 64}
+
+{com}.         /*reject a 2nd unit root*/
+.         
+. 
+. var D.unemp D.cpi2, lags(1)
+{res}
+{txt}Vector autoregression
+
+{col 1}Sample:  {res}3 - 550 {txt}{col 52}No. of obs{col 68}= {res}      548
+{txt}Log likelihood = {res}-65.52511{txt}{col 40}{col 52}AIC{col 68}= {res} .2610406
+{txt}FPE{col 16}= {res} .0044506{txt}{col 52}HQIC{col 68}= {res} .2794686
+{txt}Det(Sigma_ml){col 16}= {res} .0043542{txt}{col 52}SBIC{col 68}= {res} .3081896
+
+{col 1}{text}Equation        {col 18}  Parms{col 26}     RMSE {col 37}   R-sq  {col 47}   chi2   {col 58} P>chi2
+{col 1}{text}{hline 17}{hline 8}{hline 11}{hline 10}{hline 11}{hline 7}
+{col 1}{text}D_unemp         {col 18}{result}     3{col 26}{space 2} .177151{col 37}{space 1} 0.0358{col 47} 20.35494{col 58} 0.0000
+{col 1}{text}D_cpi2          {col 18}{result}     3{col 26}{space 2} .377105{col 37}{space 1} 0.1500{col 47} 96.68462{col 58} 0.0000
+{col 1}{text}{hline 17}{hline 8}{hline 11}{hline 10}{hline 11}{hline 7}
+
+{res}{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}D_unemp      {txt}{c |}
+{space 7}unemp {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2} .1809552{col 26}{space 2} .0422465{col 37}{space 1}    4.28{col 46}{space 3}0.000{col 54}{space 4} .0981536{col 67}{space 3} .2637568
+{txt}{space 12} {c |}
+{space 8}cpi2 {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2}-.0153289{col 26}{space 2}  .018672{col 37}{space 1}   -0.82{col 46}{space 3}0.412{col 54}{space 4}-.0519254{col 67}{space 3} .0212676
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} .0008919{col 26}{space 2} .0075499{col 37}{space 1}    0.12{col 46}{space 3}0.906{col 54}{space 4}-.0139057{col 67}{space 3} .0156894
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}D_cpi2       {txt}{c |}
+{space 7}unemp {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2}-.1271766{col 26}{space 2} .0899308{col 37}{space 1}   -1.41{col 46}{space 3}0.157{col 54}{space 4}-.3034377{col 67}{space 3} .0490844
+{txt}{space 12} {c |}
+{space 8}cpi2 {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2} .3755184{col 26}{space 2} .0397474{col 37}{space 1}    9.45{col 46}{space 3}0.000{col 54}{space 4} .2976148{col 67}{space 3}  .453422
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}   -.0069{col 26}{space 2} .0160716{col 37}{space 1}   -0.43{col 46}{space 3}0.668{col 54}{space 4}-.0383998{col 67}{space 3} .0245998
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. 
+{txt}end of do-file
+
+{com}. var D.unemp D.cpi2, lags(1/5)
+{res}
+{txt}Vector autoregression
+
+{col 1}Sample:  {res}7 - 550 {txt}{col 52}No. of obs{col 68}= {res}      544
+{txt}Log likelihood = {res}-17.93154{txt}{col 40}{col 52}AIC{col 68}= {res} .1468071
+{txt}FPE{col 16}= {res} .0039702{txt}{col 52}HQIC{col 68}= {res} .2147793
+{txt}Det(Sigma_ml){col 16}= {res} .0036617{txt}{col 52}SBIC{col 68}= {res} .3206617
+
+{col 1}{text}Equation        {col 18}  Parms{col 26}     RMSE {col 37}   R-sq  {col 47}   chi2   {col 58} P>chi2
+{col 1}{text}{hline 17}{hline 8}{hline 11}{hline 10}{hline 11}{hline 7}
+{col 1}{text}D_unemp         {col 18}{result}    11{col 26}{space 2} .165782{col 37}{space 1} 0.1682{col 47} 109.9687{col 58} 0.0000
+{col 1}{text}D_cpi2          {col 18}{result}    11{col 26}{space 2}  .37365{col 37}{space 1} 0.1830{col 47} 121.8749{col 58} 0.0000
+{col 1}{text}{hline 17}{hline 8}{hline 11}{hline 10}{hline 11}{hline 7}
+
+{res}{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}D_unemp      {txt}{c |}
+{space 7}unemp {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2} .0526768{col 26}{space 2} .0427674{col 37}{space 1}    1.23{col 46}{space 3}0.218{col 54}{space 4}-.0311459{col 67}{space 3} .1364994
+{txt}{space 8}L2D. {c |}{col 14}{res}{space 2} .1894038{col 26}{space 2} .0421069{col 37}{space 1}    4.50{col 46}{space 3}0.000{col 54}{space 4} .1068759{col 67}{space 3} .2719317
+{txt}{space 8}L3D. {c |}{col 14}{res}{space 2} .1548709{col 26}{space 2}  .042498{col 37}{space 1}    3.64{col 46}{space 3}0.000{col 54}{space 4} .0715764{col 67}{space 3} .2381654
+{txt}{space 8}L4D. {c |}{col 14}{res}{space 2} .1576954{col 26}{space 2} .0425669{col 37}{space 1}    3.70{col 46}{space 3}0.000{col 54}{space 4} .0742658{col 67}{space 3} .2411249
+{txt}{space 8}L5D. {c |}{col 14}{res}{space 2}  .081772{col 26}{space 2} .0430589{col 37}{space 1}    1.90{col 46}{space 3}0.058{col 54}{space 4}-.0026219{col 67}{space 3} .1661658
+{txt}{space 12} {c |}
+{space 8}cpi2 {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2} .0117549{col 26}{space 2} .0190479{col 37}{space 1}    0.62{col 46}{space 3}0.537{col 54}{space 4}-.0255782{col 67}{space 3} .0490881
+{txt}{space 8}L2D. {c |}{col 14}{res}{space 2} .0108736{col 26}{space 2} .0202779{col 37}{space 1}    0.54{col 46}{space 3}0.592{col 54}{space 4}-.0288703{col 67}{space 3} .0506176
+{txt}{space 8}L3D. {c |}{col 14}{res}{space 2}-.0187614{col 26}{space 2} .0201308{col 37}{space 1}   -0.93{col 46}{space 3}0.351{col 54}{space 4} -.058217{col 67}{space 3} .0206943
+{txt}{space 8}L4D. {c |}{col 14}{res}{space 2} .0600272{col 26}{space 2} .0202036{col 37}{space 1}    2.97{col 46}{space 3}0.003{col 54}{space 4} .0204289{col 67}{space 3} .0996255
+{txt}{space 8}L5D. {c |}{col 14}{res}{space 2}-.0261026{col 26}{space 2} .0189405{col 37}{space 1}   -1.38{col 46}{space 3}0.168{col 54}{space 4}-.0632252{col 67}{space 3}   .01102
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-.0004084{col 26}{space 2}  .007043{col 37}{space 1}   -0.06{col 46}{space 3}0.954{col 54}{space 4}-.0142125{col 67}{space 3} .0133957
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}D_cpi2       {txt}{c |}
+{space 7}unemp {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2} .0201554{col 26}{space 2} .0963922{col 37}{space 1}    0.21{col 46}{space 3}0.834{col 54}{space 4}-.1687698{col 67}{space 3} .2090806
+{txt}{space 8}L2D. {c |}{col 14}{res}{space 2}-.1370853{col 26}{space 2} .0949033{col 37}{space 1}   -1.44{col 46}{space 3}0.149{col 54}{space 4}-.3230923{col 67}{space 3} .0489218
+{txt}{space 8}L3D. {c |}{col 14}{res}{space 2}-.2370561{col 26}{space 2} .0957848{col 37}{space 1}   -2.47{col 46}{space 3}0.013{col 54}{space 4}-.4247909{col 67}{space 3}-.0493214
+{txt}{space 8}L4D. {c |}{col 14}{res}{space 2}-.0726877{col 26}{space 2} .0959401{col 37}{space 1}   -0.76{col 46}{space 3}0.449{col 54}{space 4}-.2607269{col 67}{space 3} .1153515
+{txt}{space 8}L5D. {c |}{col 14}{res}{space 2}-.1339456{col 26}{space 2}  .097049{col 37}{space 1}   -1.38{col 46}{space 3}0.168{col 54}{space 4}-.3241582{col 67}{space 3} .0562669
+{txt}{space 12} {c |}
+{space 8}cpi2 {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2}   .37399{col 26}{space 2} .0429314{col 37}{space 1}    8.71{col 46}{space 3}0.000{col 54}{space 4}  .289846{col 67}{space 3} .4581341
+{txt}{space 8}L2D. {c |}{col 14}{res}{space 2}-.0250748{col 26}{space 2} .0457038{col 37}{space 1}   -0.55{col 46}{space 3}0.583{col 54}{space 4}-.1146526{col 67}{space 3} .0645029
+{txt}{space 8}L3D. {c |}{col 14}{res}{space 2}-.0925967{col 26}{space 2} .0453722{col 37}{space 1}   -2.04{col 46}{space 3}0.041{col 54}{space 4}-.1815246{col 67}{space 3}-.0036688
+{txt}{space 8}L4D. {c |}{col 14}{res}{space 2}  .084927{col 26}{space 2} .0455362{col 37}{space 1}    1.87{col 46}{space 3}0.062{col 54}{space 4}-.0043223{col 67}{space 3} .1741764
+{txt}{space 8}L5D. {c |}{col 14}{res}{space 2}-.0242986{col 26}{space 2} .0426893{col 37}{space 1}   -0.57{col 46}{space 3}0.569{col 54}{space 4}-.1079681{col 67}{space 3} .0593709
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-.0061821{col 26}{space 2} .0158741{col 37}{space 1}   -0.39{col 46}{space 3}0.697{col 54}{space 4}-.0372947{col 67}{space 3} .0249305
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. var D.unemp D.cpi2, lags(1/12)
+{res}
+{txt}Vector autoregression
+
+{col 1}Sample:  {res}14 - 550 {txt}{col 52}No. of obs{col 68}= {res}      537
+{txt}Log likelihood = {res} 82.91904{txt}{col 40}{col 52}AIC{col 68}= {res}-.1226035
+{txt}FPE{col 16}= {res} .0030329{txt}{col 52}HQIC{col 68}= {res} .0335091
+{txt}Det(Sigma_ml){col 16}= {res} .0025173{txt}{col 52}SBIC{col 68}= {res} .2764652
+
+{col 1}{text}Equation        {col 18}  Parms{col 26}     RMSE {col 37}   R-sq  {col 47}   chi2   {col 58} P>chi2
+{col 1}{text}{hline 17}{hline 8}{hline 11}{hline 10}{hline 11}{hline 7}
+{col 1}{text}D_unemp         {col 18}{result}    25{col 26}{space 2} .163714{col 37}{space 1} 0.2044{col 47} 137.9668{col 58} 0.0000
+{col 1}{text}D_cpi2          {col 18}{result}    25{col 26}{space 2} .321596{col 37}{space 1} 0.4175{col 47} 384.9198{col 58} 0.0000
+{col 1}{text}{hline 17}{hline 8}{hline 11}{hline 10}{hline 11}{hline 7}
+
+{res}{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}D_unemp      {txt}{c |}
+{space 7}unemp {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2} .0605136{col 26}{space 2} .0426237{col 37}{space 1}    1.42{col 46}{space 3}0.156{col 54}{space 4}-.0230273{col 67}{space 3} .1440546
+{txt}{space 8}L2D. {c |}{col 14}{res}{space 2} .1608984{col 26}{space 2} .0425969{col 37}{space 1}    3.78{col 46}{space 3}0.000{col 54}{space 4} .0774099{col 67}{space 3} .2443869
+{txt}{space 8}L3D. {c |}{col 14}{res}{space 2} .1482593{col 26}{space 2} .0430095{col 37}{space 1}    3.45{col 46}{space 3}0.001{col 54}{space 4} .0639623{col 67}{space 3} .2325563
+{txt}{space 8}L4D. {c |}{col 14}{res}{space 2} .1433072{col 26}{space 2} .0437683{col 37}{space 1}    3.27{col 46}{space 3}0.001{col 54}{space 4} .0575229{col 67}{space 3} .2290915
+{txt}{space 8}L5D. {c |}{col 14}{res}{space 2} .0774757{col 26}{space 2}  .044174{col 37}{space 1}    1.75{col 46}{space 3}0.079{col 54}{space 4}-.0091038{col 67}{space 3} .1640552
+{txt}{space 8}L6D. {c |}{col 14}{res}{space 2} .0613783{col 26}{space 2} .0444149{col 37}{space 1}    1.38{col 46}{space 3}0.167{col 54}{space 4}-.0256732{col 67}{space 3} .1484299
+{txt}{space 8}L7D. {c |}{col 14}{res}{space 2}-.0067033{col 26}{space 2} .0442641{col 37}{space 1}   -0.15{col 46}{space 3}0.880{col 54}{space 4}-.0934594{col 67}{space 3} .0800528
+{txt}{space 8}L8D. {c |}{col 14}{res}{space 2}-.0010788{col 26}{space 2} .0441182{col 37}{space 1}   -0.02{col 46}{space 3}0.980{col 54}{space 4}-.0875489{col 67}{space 3} .0853914
+{txt}{space 8}L9D. {c |}{col 14}{res}{space 2} .0180482{col 26}{space 2} .0435147{col 37}{space 1}    0.41{col 46}{space 3}0.678{col 54}{space 4} -.067239{col 67}{space 3} .1033354
+{txt}{space 7}L10D. {c |}{col 14}{res}{space 2}-.0121176{col 26}{space 2} .0430803{col 37}{space 1}   -0.28{col 46}{space 3}0.778{col 54}{space 4}-.0965535{col 67}{space 3} .0723183
+{txt}{space 7}L11D. {c |}{col 14}{res}{space 2} .0749532{col 26}{space 2} .0426077{col 37}{space 1}    1.76{col 46}{space 3}0.079{col 54}{space 4}-.0085563{col 67}{space 3} .1584627
+{txt}{space 7}L12D. {c |}{col 14}{res}{space 2}-.0981933{col 26}{space 2} .0427342{col 37}{space 1}   -2.30{col 46}{space 3}0.022{col 54}{space 4}-.1819508{col 67}{space 3}-.0144357
+{txt}{space 12} {c |}
+{space 8}cpi2 {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2} .0083856{col 26}{space 2} .0189899{col 37}{space 1}    0.44{col 46}{space 3}0.659{col 54}{space 4}-.0288339{col 67}{space 3} .0456052
+{txt}{space 8}L2D. {c |}{col 14}{res}{space 2} .0078029{col 26}{space 2} .0202066{col 37}{space 1}    0.39{col 46}{space 3}0.699{col 54}{space 4}-.0318012{col 67}{space 3} .0474071
+{txt}{space 8}L3D. {c |}{col 14}{res}{space 2}-.0220708{col 26}{space 2} .0201473{col 37}{space 1}   -1.10{col 46}{space 3}0.273{col 54}{space 4}-.0615588{col 67}{space 3} .0174171
+{txt}{space 8}L4D. {c |}{col 14}{res}{space 2} .0624764{col 26}{space 2} .0201162{col 37}{space 1}    3.11{col 46}{space 3}0.002{col 54}{space 4} .0230494{col 67}{space 3} .1019034
+{txt}{space 8}L5D. {c |}{col 14}{res}{space 2}-.0425706{col 26}{space 2}  .020361{col 37}{space 1}   -2.09{col 46}{space 3}0.037{col 54}{space 4}-.0824774{col 67}{space 3}-.0026637
+{txt}{space 8}L6D. {c |}{col 14}{res}{space 2} .0394357{col 26}{space 2} .0203891{col 37}{space 1}    1.93{col 46}{space 3}0.053{col 54}{space 4}-.0005263{col 67}{space 3} .0793977
+{txt}{space 8}L7D. {c |}{col 14}{res}{space 2} 7.17e-08{col 26}{space 2} .0204493{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}-.0400797{col 67}{space 3} .0400799
+{txt}{space 8}L8D. {c |}{col 14}{res}{space 2} .0127498{col 26}{space 2} .0204307{col 37}{space 1}    0.62{col 46}{space 3}0.533{col 54}{space 4}-.0272936{col 67}{space 3} .0527931
+{txt}{space 8}L9D. {c |}{col 14}{res}{space 2}-.0146602{col 26}{space 2} .0204104{col 37}{space 1}   -0.72{col 46}{space 3}0.473{col 54}{space 4}-.0546639{col 67}{space 3} .0253435
+{txt}{space 7}L10D. {c |}{col 14}{res}{space 2} .0171465{col 26}{space 2} .0204635{col 37}{space 1}    0.84{col 46}{space 3}0.402{col 54}{space 4}-.0229613{col 67}{space 3} .0572543
+{txt}{space 7}L11D. {c |}{col 14}{res}{space 2}-.0125294{col 26}{space 2} .0204959{col 37}{space 1}   -0.61{col 46}{space 3}0.541{col 54}{space 4}-.0527006{col 67}{space 3} .0276418
+{txt}{space 7}L12D. {c |}{col 14}{res}{space 2} .0457768{col 26}{space 2} .0190431{col 37}{space 1}    2.40{col 46}{space 3}0.016{col 54}{space 4}  .008453{col 67}{space 3} .0831006
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-.0002753{col 26}{space 2} .0069108{col 37}{space 1}   -0.04{col 46}{space 3}0.968{col 54}{space 4}-.0138203{col 67}{space 3} .0132697
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}D_cpi2       {txt}{c |}
+{space 7}unemp {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2}-.0026398{col 26}{space 2} .0837289{col 37}{space 1}   -0.03{col 46}{space 3}0.975{col 54}{space 4}-.1667455{col 67}{space 3} .1614658
+{txt}{space 8}L2D. {c |}{col 14}{res}{space 2}-.0995987{col 26}{space 2} .0836763{col 37}{space 1}   -1.19{col 46}{space 3}0.234{col 54}{space 4}-.2636013{col 67}{space 3} .0644038
+{txt}{space 8}L3D. {c |}{col 14}{res}{space 2}-.3115335{col 26}{space 2} .0844866{col 37}{space 1}   -3.69{col 46}{space 3}0.000{col 54}{space 4}-.4771243{col 67}{space 3}-.1459427
+{txt}{space 8}L4D. {c |}{col 14}{res}{space 2}-.0594364{col 26}{space 2} .0859772{col 37}{space 1}   -0.69{col 46}{space 3}0.489{col 54}{space 4}-.2279487{col 67}{space 3} .1090759
+{txt}{space 8}L5D. {c |}{col 14}{res}{space 2}-.1131752{col 26}{space 2} .0867743{col 37}{space 1}   -1.30{col 46}{space 3}0.192{col 54}{space 4}-.2832497{col 67}{space 3} .0568993
+{txt}{space 8}L6D. {c |}{col 14}{res}{space 2} .1948952{col 26}{space 2} .0872474{col 37}{space 1}    2.23{col 46}{space 3}0.025{col 54}{space 4} .0238934{col 67}{space 3}  .365897
+{txt}{space 8}L7D. {c |}{col 14}{res}{space 2} .0773666{col 26}{space 2} .0869513{col 37}{space 1}    0.89{col 46}{space 3}0.374{col 54}{space 4}-.0930547{col 67}{space 3}  .247788
+{txt}{space 8}L8D. {c |}{col 14}{res}{space 2} .1116416{col 26}{space 2} .0866647{col 37}{space 1}    1.29{col 46}{space 3}0.198{col 54}{space 4}-.0582181{col 67}{space 3} .2815012
+{txt}{space 8}L9D. {c |}{col 14}{res}{space 2}-.0624321{col 26}{space 2} .0854791{col 37}{space 1}   -0.73{col 46}{space 3}0.465{col 54}{space 4} -.229968{col 67}{space 3} .1051038
+{txt}{space 7}L10D. {c |}{col 14}{res}{space 2} .0167223{col 26}{space 2} .0846258{col 37}{space 1}    0.20{col 46}{space 3}0.843{col 54}{space 4}-.1491413{col 67}{space 3} .1825859
+{txt}{space 7}L11D. {c |}{col 14}{res}{space 2} -.172206{col 26}{space 2} .0836974{col 37}{space 1}   -2.06{col 46}{space 3}0.040{col 54}{space 4}-.3362499{col 67}{space 3}-.0081621
+{txt}{space 7}L12D. {c |}{col 14}{res}{space 2}-.0632315{col 26}{space 2}  .083946{col 37}{space 1}   -0.75{col 46}{space 3}0.451{col 54}{space 4}-.2277626{col 67}{space 3} .1012995
+{txt}{space 12} {c |}
+{space 8}cpi2 {c |}
+{space 9}LD. {c |}{col 14}{res}{space 2} .3487121{col 26}{space 2} .0373033{col 37}{space 1}    9.35{col 46}{space 3}0.000{col 54}{space 4}  .275599{col 67}{space 3} .4218252
+{txt}{space 8}L2D. {c |}{col 14}{res}{space 2} .0141801{col 26}{space 2} .0396933{col 37}{space 1}    0.36{col 46}{space 3}0.721{col 54}{space 4}-.0636173{col 67}{space 3} .0919774
+{txt}{space 8}L3D. {c |}{col 14}{res}{space 2} -.042069{col 26}{space 2} .0395768{col 37}{space 1}   -1.06{col 46}{space 3}0.288{col 54}{space 4}-.1196381{col 67}{space 3} .0355002
+{txt}{space 8}L4D. {c |}{col 14}{res}{space 2} .0747458{col 26}{space 2} .0395157{col 37}{space 1}    1.89{col 46}{space 3}0.059{col 54}{space 4}-.0027036{col 67}{space 3} .1521952
+{txt}{space 8}L5D. {c |}{col 14}{res}{space 2}-.0006114{col 26}{space 2} .0399966{col 37}{space 1}   -0.02{col 46}{space 3}0.988{col 54}{space 4}-.0790033{col 67}{space 3} .0777805
+{txt}{space 8}L6D. {c |}{col 14}{res}{space 2} .0147683{col 26}{space 2} .0400519{col 37}{space 1}    0.37{col 46}{space 3}0.712{col 54}{space 4} -.063732{col 67}{space 3} .0932686
+{txt}{space 8}L7D. {c |}{col 14}{res}{space 2}  .054838{col 26}{space 2}   .04017{col 37}{space 1}    1.37{col 46}{space 3}0.172{col 54}{space 4}-.0238937{col 67}{space 3} .1335697
+{txt}{space 8}L8D. {c |}{col 14}{res}{space 2}-.0111083{col 26}{space 2} .0401334{col 37}{space 1}   -0.28{col 46}{space 3}0.782{col 54}{space 4}-.0897685{col 67}{space 3} .0675518
+{txt}{space 8}L9D. {c |}{col 14}{res}{space 2} .0659921{col 26}{space 2} .0400937{col 37}{space 1}    1.65{col 46}{space 3}0.100{col 54}{space 4}-.0125901{col 67}{space 3} .1445744
+{txt}{space 7}L10D. {c |}{col 14}{res}{space 2} .0548321{col 26}{space 2}  .040198{col 37}{space 1}    1.36{col 46}{space 3}0.173{col 54}{space 4}-.0239546{col 67}{space 3} .1336188
+{txt}{space 7}L11D. {c |}{col 14}{res}{space 2} .1583789{col 26}{space 2} .0402616{col 37}{space 1}    3.93{col 46}{space 3}0.000{col 54}{space 4} .0794676{col 67}{space 3} .2372901
+{txt}{space 7}L12D. {c |}{col 14}{res}{space 2}-.5106366{col 26}{space 2} .0374078{col 37}{space 1}  -13.65{col 46}{space 3}0.000{col 54}{space 4}-.5839545{col 67}{space 3}-.4373188
+{txt}{space 12} {c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} -.006138{col 26}{space 2} .0135754{col 37}{space 1}   -0.45{col 46}{space 3}0.651{col 54}{space 4}-.0327454{col 67}{space 3} .0204693
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. 

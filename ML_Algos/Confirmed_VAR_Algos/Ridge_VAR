@@ -1,0 +1,156 @@
+"""
+Description: This script use US Macroeconomic data to calcuate a Vector Autoregression.
+            This VAR is calcuated using the Ridge machine learning model. Additionally,
+            impulse reseponse functions are calcualted.
+Author: Michael Varner
+Last Edited: November 6, 2016
+"""
+#Import Packages
+import numpy
+import pandas
+from sklearn.cross_validation import KFold
+from sklearn.grid_search import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import Ridge
+from sklearn import linear_model
+from sklearn.linear_model import RidgeCV
+
+"""
+Stage 1: Import and Clean Data
+"""
+#import data
+qe_data = pandas.read_csv('/Users/Mike/Desktop/Bates Files/Senior Year/Thesis/QE_Data/qe_data.csv', low_memory=False)
+#remove date variable
+date = pandas.DataFrame(qe_data, columns=['date'])
+x = qe_data.drop('date', 1)
+#create list of exogeneous variable names 
+exogeneous_var_names = ['money_supply', 'tax_rev', 'federal_debt', 'gov_exp', 'broad_index', 'financial_stress', 'industrial_production']
+#remove exogeneous variables
+endogeneous = x.drop(exogeneous_var_names, 1)
+#create a list of the endogeneous variable names
+endogeneous_variable_names = list(endogeneous.columns.values)
+
+#create data without lags to use in variance/covariance calculation below
+clean_data_with_out_lags = endogeneous.dropna(how='any')
+
+
+#set the maximum number of lags that the model can consider for variable selection and estimation
+#I have arbitrairly chose twice as many lags as endogeneous variables
+max_lags = int(len(endogeneous_variable_names)+1)
+lags = (range(max_lags))[1:]
+
+#create lagged values of the endogeneous variables
+for p in lags:
+    for var in endogeneous_variable_names:
+        endogeneous["L{0}_{1}".format(p , var)] = endogeneous[var].shift(p)
+
+#add back in the exogeneous variables
+#prepared_data = endogeneous.add(exogeneous)
+
+#remove missing values created by creating lags
+#this might not be what I want, but come back to it later
+clean_data = endogeneous.dropna(how='any') 
+
+
+"""
+Stage 2: Compute Matricies Using LASSO
+"""
+####Calculate the Y matrix (KxT) or (4x545)
+Y = clean_data[endogeneous_variable_names].transpose()
+Y.as_matrix()
+
+'''Calculate B using OLS row by row
+'''
+#define the model 
+ridge = linear_model.RidgeCV(fit_intercept=True, normalize=True, cv=10)
+
+#fit a regression using all data except current value
+fed_funds_ridge = ridge.fit(clean_data.drop(endogeneous_variable_names, 1) , clean_data.fed_funds.as_matrix())
+fed_funds_ridge_coeff = fed_funds_ridge.coef_
+unemployment_ridge = ridge.fit(clean_data.drop(endogeneous_variable_names, 1) , clean_data.unemployment.as_matrix())
+unemployment_ridge_coeff = unemployment_ridge.coef_
+treasury_bill_ridge = ridge.fit(clean_data.drop(endogeneous_variable_names, 1) , clean_data.treasury_bill.as_matrix())
+treasury_bill_ridge_coeff = treasury_bill_ridge.coef_
+qe_ridge = ridge.fit(clean_data.drop(endogeneous_variable_names, 1), clean_data.qe.as_matrix())
+qe_ridge_coeff = qe_ridge.coef_
+
+B = treasury_bill_ridge_coeff
+#append rows of coefficients 
+B = numpy.vstack([qe_ridge_coeff,B])
+B = numpy.vstack([unemployment_ridge_coeff,B])
+B = numpy.vstack([fed_funds_ridge_coeff,B])
+B = pandas.DataFrame(B)
+
+#####PUT INTO SPACE STATE NOTATION#####
+#create a new coefficient matrix which is (npxnp) or (16x16)
+I_4 = numpy.identity(12)
+zero_columns = numpy.zeros((12,4))
+add_on = numpy.column_stack((I_4,zero_columns))
+
+#append add_on to to B to get B_Space_State
+B_Space_State = pandas.DataFrame(numpy.append(B,add_on, axis=0))
+
+#calculate the variance/covariance matrix using numpy
+Sigma = pandas.DataFrame(numpy.cov(clean_data_with_out_lags,rowvar=False))
+
+#orthogonalize Sigma by imposing off diagonals are 0
+diag_sigma = pandas.DataFrame(numpy.diag(np.diag(Sigma)))
+#calculate cholesky decomposistion of sigma
+chol_of_sigma = pandas.DataFrame(numpy.linalg.cholesky(diag_sigma))
+#define the inverse of the cholesky decomposistion of sigma to use below
+inverse_chol = numpy.linalg.inv(chol_of_sigma)
+
+####Calculate Space-State version of the Q matrix
+zero_columns = numpy.zeros((12,4))
+zeros_16x12 = numpy.zeros((16,12))
+#append add_on to to Sigma to get Q_Space_State
+Q_Space_State = pandas.DataFrame(numpy.append(inverse_chol,zero_columns, axis=0))
+Q_Space_State = pandas.DataFrame(numpy.column_stack((Q_Space_State,zeros_16x12)))
+
+
+'''Calculate IRs
+'''
+#create impulse column vector (TX1)
+e_feddunds = pandas.DataFrame(numpy.vstack((1,numpy.zeros(((15),1)))))
+#create impulse column vector (TX1) for "qe"
+sd_of_qe = clean_data["qe"].std()
+e_qe = pandas.DataFrame(numpy.vstack((numpy.vstack((numpy.zeros((2, 1)),sd_of_qe)),numpy.zeros((13,1)))))
+e_0 = e_qe
+
+#run shock e_0 through system
+Q_e = pandas.DataFrame(numpy.matmul(Q_Space_State,e_0))
+
+#create the point estimates (QBQE_0)
+for p in range(1,21):
+    globals()['point_estimate_{}'.format(p)] = pandas.DataFrame(numpy.matmul(Q_Space_State, numpy.matmul(numpy.linalg.matrix_power(B_Space_State, p),Q_e)))
+
+#append point estimates into a matrix
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((Q_e,point_estimate_1)))
+'''
+for p in range(2,20):
+    impulse_qe_var = numpy.column_stack((impulse_qe_var,"point_estimate_"+str(p)))
+'''
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_2)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_3)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_4)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_5)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_6)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_7)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_8)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_9)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_10)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_11)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_12)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_13)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_14)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_15)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_16)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_17)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_18)))
+impulse_qe_var = pandas.DataFrame(numpy.column_stack((impulse_qe_var,point_estimate_19)))
+
+#pull out the 3rd row to get response of 
+imp_qe_response_unemp = pandas.DataFrame(impulse_qe_var.loc[1:1].transpose())
+
+
+
